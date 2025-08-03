@@ -27,6 +27,11 @@ func main() {
 		ret = fmt.Sprintf("%x", md.Sum([]byte(src+":"+dst+":"+who+":"+strconv.Itoa(stage)+":"+action)))
 		return ret
 	}
+	kOld := func(src string, dst string, who string, stage int) string {
+		var ret string
+		ret = fmt.Sprintf("%x", md.Sum([]byte(src+":"+dst+":"+who+":"+strconv.Itoa(stage))))
+		return ret
+	}
 	f, err := os.Create("insert.sql")
 	if err != nil {
 		log.Fatal(err)
@@ -49,14 +54,16 @@ func main() {
 		}
 		return ret
 	}
-	upd := func(src string, dst string, who string, stage int, action string) string {
+	upd := func(src string, dst string, who string, stage int, action string, oldKey string) string {
 		var ret string
 		m := k(src, dst, who, stage, action)
-		mOld := k(src, dst, who, stage, "")
-		ret = "UPDATE tman.routing_rule SET key_routing= '" + m + "', act='regular' WHERE key_routing = '" + mOld + "';"
-		_, err = ff.WriteString(ret + "\n")
-		if err != nil {
-			log.Fatal(err)
+		mOld := kOld(src, dst, who, stage)
+		if oldKey == mOld {
+			ret = "UPDATE tman.routing_rule SET key_routing= '" + m + "', act='regular' WHERE key_routing = '" + mOld + "';"
+			_, err = ff.WriteString(ret + "\n")
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 		return ret
 	}
@@ -82,7 +89,7 @@ func main() {
 			Stage:  0,
 			Who:    rec[5],
 			Action: rec[6],
-			OldKey: rec[7],
+			OldKey: rec[8],
 		}
 		//stage, err := strconv.Atoi(rec[4])
 		//if err == nil {
@@ -91,7 +98,7 @@ func main() {
 		//rec.Stage = 0
 		//routList = append(routList, rec)
 		fmt.Println(ins(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.Action, rec.SrcRes, rec.DstRes))
-		fmt.Println(upd(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.Action))
+		fmt.Println(upd(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.Action, rec.OldKey))
 	}
 
 	//fmt.Println(ins("mart", "tman", "application", 1, "primary", "tman", "flc"))
