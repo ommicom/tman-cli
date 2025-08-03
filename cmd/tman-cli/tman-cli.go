@@ -59,7 +59,7 @@ func main() {
 		m := k(src, dst, who, stage, action)
 		mOld := kOld(src, dst, who, stage)
 		if oldKey == mOld {
-			ret = "UPDATE tman.routing_rule SET key_routing= '" + m + "', act='regular' WHERE key_routing = '" + mOld + "';"
+			ret = "UPDATE tman.routing_rule SET key_routing = '" + m + "', act='regular' WHERE key_routing = '" + mOld + "';"
 			_, err = ff.WriteString(ret + "\n")
 			if err != nil {
 				log.Fatal(err)
