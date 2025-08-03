@@ -1,4 +1,4 @@
-package tman_cli
+package main
 
 import (
 	"crypto/md5"
@@ -13,5 +13,20 @@ func main() {
 		ret = fmt.Sprintf("%x", md.Sum([]byte(src+":"+dst+":"+who+":"+strconv.Itoa(stage)+":"+action)))
 		return ret
 	}
+
+	ins := func(src string, dst string, who string, stage int, action string, src_res string, dst_res string) string {
+		var ret string
+		m := k(src, dst, who, stage, action)
+
+		ret = "INSERT INTO tman.routing_rule(key_routing, src, dst, stage, src_result, dst_result, \"desc\", who, act) VALUES(" + m + ",\"" + src + "\", \"" + dst + "\", \"" + who + "\", " + strconv.Itoa(stage) + ", \"" + src_res + "\", \"" + dst_res + "\", '', \"" + who + "\", \"" + action + "\");"
+		return ret
+	}
+	fmt.Println(ins("mart", "tman", "application", 1, "", "tman", "flc"))
+	fmt.Println(ins("mart", "tman", "application", 1, "regular", "tman", "flc"))
+	//upd := func(src string, dst string, who string, stage int, action string) string {
+	//	var ret string
+	//
+	//	return ret
+	//}
 
 }
