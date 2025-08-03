@@ -18,7 +18,7 @@ func main() {
 		var ret string
 		m := k(src, dst, who, stage, action)
 
-		ret = "INSERT INTO tman.routing_rule(key_routing, src, dst, stage, src_result, dst_result, \"desc\", who, act) VALUES(" + m + ",\"" + src + "\", \"" + dst + "\", \"" + who + "\", " + strconv.Itoa(stage) + ", \"" + src_res + "\", \"" + dst_res + "\", '', \"" + who + "\", \"" + action + "\");"
+		ret = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, \"desc\", act) VALUES('" + m + "','" + src + "', '" + dst + "', '" + who + "', " + strconv.Itoa(stage) + ", '" + src_res + "', '" + dst_res + "', '', '" + action + "');"
 		return ret
 	}
 	fmt.Println(ins("mart", "tman", "application", 1, "", "tman", "flc"))
