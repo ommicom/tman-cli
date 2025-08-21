@@ -82,7 +82,7 @@ func main() {
 		log.Fatal(err)
 	}
 	//var routList []KeyRoutingT
-	var insStr string = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, \"desc\", kind, stage_result, act) VALUES"
+	var insStr string = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, \"desc\", kind, stage_result, action) VALUES"
 	_, err = f.WriteString(insStr + "\n")
 	for _, rec := range recs {
 		rec := KeyRoutingT{
