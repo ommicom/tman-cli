@@ -44,12 +44,13 @@ func main() {
 	}
 	defer ff.Close()
 
-	ins := func(src string, dst string, who string, stage string, action string, src_res string, dst_res string, kind string) string {
+	ins := func(src string, dst string, who string, stage string, stage_res string, action string, src_res string, dst_res string, kind string) string {
 		var ret string
 		m := k(src, dst, who, stage, kind)
 
 		//ret = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, \"desc\", kind, stage_result, act) VALUES('" + m + "','" + src + "', '" + dst + "', '" + who + "', " + stage + ", '" + src_res + "', '" + dst_res + "', '', '" + kind + "', " + stage + ", '" + action + "');"
-		ret = "('" + m + "','" + src + "', '" + dst + "', '" + who + "', " + stage + ", '" + src_res + "', '" + dst_res + "', '', '" + kind + "', " + stage + ", '" + action + "'),"
+		//  ng_rule(key_routing, src, dst,who, stage, src_result, dst_result, kind, stage_result, action) VALUES"
+		ret = "('" + m + "','" + src + "', '" + dst + "', '" + who + "', " + stage + ", '" + src_res + "', '" + dst_res + "', '" + kind + "', " + stage_res + ", '" + action + "'),"
 		_, err = f.WriteString(ret + "\n")
 		if err != nil {
 			log.Fatal(err)
@@ -82,7 +83,7 @@ func main() {
 		log.Fatal(err)
 	}
 	//var routList []KeyRoutingT
-	var insStr string = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, \"desc\", kind, stage_result, action) VALUES"
+	var insStr string = "INSERT INTO tman.routing_rule(key_routing, src, dst,who, stage, src_result, dst_result, kind, stage_result, action) VALUES"
 	_, err = f.WriteString(insStr + "\n")
 	for _, rec := range recs {
 		rec := KeyRoutingT{
@@ -104,7 +105,7 @@ func main() {
 		//rec.Stage = 0
 		//routList = append(routList, rec)
 
-		fmt.Println(ins(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.Action, rec.SrcRes, rec.DstRes, rec.Kind))
+		fmt.Println(ins(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.StageRes, rec.Action, rec.SrcRes, rec.DstRes, rec.Kind))
 		fmt.Println(upd(rec.Src, rec.Dst, rec.Who, rec.Stage, rec.Kind, rec.OldKey))
 	}
 
